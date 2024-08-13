@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './index.css'
+import ChatPage from './pages/chatPage';
 
 function App() {
   const [isModalShow, setIsModalShow] = useState(false);
@@ -36,6 +37,7 @@ function App() {
         </>
       ):null}
       <ModalButton />
+      <ChatPage />
     </>
   )
 }
