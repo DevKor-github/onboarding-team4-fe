@@ -28,7 +28,6 @@ function App() {
         <button onClick={() => setIsModalShow(true)}>Show offer</button>
       </div>
     </div>
-    <MessageBubble />
     </>
   );
 

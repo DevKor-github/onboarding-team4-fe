@@ -1,17 +1,45 @@
-function MessageBubble() {
+import { ChatWithoutSender } from '../api/models/chatModel';
+import { MessageBubbleType } from './messageBubbleType';
+
+function MessageBubble({type, senderName, data}: {type: MessageBubbleType, senderName: string, data: ChatWithoutSender}) {
+
+  const className = {
+    [MessageBubbleType.LEFT]: {
+      messageBubble: "rounded-tl-none before:-start-2 before:[mask-image:url('./assets/message_bubble_right_mask.svg')]",
+      sender: '',
+    },
+    [MessageBubbleType.RIGHT]: {
+      messageBubble: "rounded-tr-none before:-end-2 before:[mask-image:url('./assets/message_bubble_left_mask.svg')]",
+      sender: 'hidden',
+    },
+    [MessageBubbleType.NONE]: {
+      messageBubble: '',
+      sender: 'hidden',
+    },
+  }[type];
+
+  const className2 = {
+    text: "text-left text-sm ",
+  }
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('ko-KR', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+  };
+
   return (
-    <div className='relative block m-5 w-fit p-5 max-w-[90%] rounded-[1rem] rounded-br-none min-h-[2.75rem] min-w-[2.75rem] bg-slate-600 text-[oklch(var(--nc)/var(--tw-text-opacity))]'>
-      <div
-        className='absolute end-[-0.75rem] bottom-0 h-[0.75rem] w-[0.75rem] bg-inherit'
-        style={{
-          content: '""',
-          maskImage: 'url(/message_bubble_mask.svg)',
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center',
-        }}
-      ></div>
-      <p>Message Bubble</p>
+    <div className={`message-bubble ${className.messageBubble}`}>
+      <div className=' flex flex-col justify-start'>
+        <p className={`${className2.text} ${className.sender} font-bold`}>{senderName}</p>
+        <p className={`${className2.text} py-1`}>{data.content}</p>
+        <div className='flex flex-row justify-end'>
+          <p className='text-xs'>{formatTime(data.time)}</p>
+          <img className='px-1' src="/src/assets/check.svg" alt="" />
+        </div>
+      </div>
     </div>
   );
 }
