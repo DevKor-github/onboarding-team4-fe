@@ -1,14 +1,48 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { socketAtom } from '../socket';
-import { Chat } from '../api/models/chatModel';
-import { useEffect, useState } from 'react';
-import { addChatsAtom, chatAtom } from '../atom/ChatAtom';
+import { Chat, ChatGroup } from '../api/models/chatModel';
+import { useEffect, useRef, useState } from 'react';
+import MessageGroup from '../components/messageGroup';
+import { MessageGroupType } from '../components/messageBubbleType';
+
 
 function ChatPage() {
+  const ref = useRef<HTMLDivElement>(null);
   const socket = useAtomValue(socketAtom);
   const [, setIsConnected] = useState(socket.connected);
-  const addChats = useSetAtom(addChatsAtom);
-  const chats = useAtomValue(chatAtom);
+  const [chats, setChats] = useState([] as ChatGroup[]);
+
+  function addChat(chat: Chat) {
+    setChats((prev) => {
+        if (prev.length !== 0 && prev[prev.length - 1].senderId === chat.senderId) {
+          const lastGroup = prev[prev.length - 1];
+          lastGroup.chats.push({
+            content: chat.content,
+            contentType: chat.contentType,
+            time: chat.time,
+          });
+        } else {
+        prev.push({
+          senderId: chat.senderId,
+          senderName: chat.senderName,
+          img: '/src/assets/__avatar_url.png',
+          chats: [
+            {
+              content: chat.content,
+              contentType: chat.contentType,
+              time: chat.time,
+            },
+          ],
+        });
+      }
+      console.log(prev);
+      return [...prev];
+    });
+  }
+
+  useEffect(() => {
+    ref.current?.scrollTo(0, ref.current.scrollHeight);
+  }, [chats]);
 
   useEffect(() => {
     function onConnect() {
@@ -22,7 +56,7 @@ function ChatPage() {
 
     function onReceiveMessage(chat: Chat) {
       console.log(chat);
-      addChats([chat]);
+      addChat(chat);
     }
 
     function onUserList(room: string, userList: string[]) {
@@ -30,7 +64,7 @@ function ChatPage() {
     }
 
     function onLoadChats(chats: Chat[]) {
-      addChats(chats);
+      //addChats(chats);
     }
 
     socket.on('connect', onConnect);
@@ -46,19 +80,18 @@ function ChatPage() {
       socket.off('disconnect', onDisconnect);
       socket.off('receive_message', onReceiveMessage);
     };
-  }, [addChats, socket]);
+  }, [socket]);
 
   return (
-    <div>
-      <h1>Chat</h1>
-      <button onClick={() => socket.emit('send_message', { content: 'Hello, world!', contentType:'text', senderId:"adfasdlkfajs;" })}>send chat</button>
-      <div>
-        {chats.map((chat: Chat, index: number) => (
-          <div key={index}>
-            <h2>{chat.userNick}</h2>
-            <p>{chat.content}</p>
-          </div>
-        ))}
+    <div className='h-full bg-slate-500'>
+      <div className='flex flex-col w-96 mx-auto bg-white h-full p-0.5'>
+        <h1>Chat</h1>
+        <div ref={ref} className='overflow-y-scroll h-full p-3 pr-2'>
+          {chats.map((chatGroup: ChatGroup) => (
+            <MessageGroup type={socket.id === chatGroup.senderId ? MessageGroupType.RIGHT : MessageGroupType.LEFT} data={chatGroup}/>
+          ))}
+        </div>
+        <button onClick={() => socket.emit('send_message', { content: 'Hello, world!', contentType:'text', senderId:"adfasdlkfajs;" })}>send chat</button>
       </div>
     </div>
   );
