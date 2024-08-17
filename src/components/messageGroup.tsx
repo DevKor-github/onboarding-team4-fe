@@ -1,8 +1,8 @@
-import { ChatList } from '../api/models/chatModel';
+import { ChatGroup } from '../api/models/chatModel';
 import MessageBubble from './messageBubble';
 import { MessageBubbleType, MessageGroupType } from './messageBubbleType';
 
-function MessageGroup({type, data}: {type: MessageGroupType, data: ChatList}) {
+function MessageGroup({type, data}: {type: MessageGroupType, data: ChatGroup}) {
   const className = {
     [MessageGroupType.LEFT]: {
       row: 'justify-start',

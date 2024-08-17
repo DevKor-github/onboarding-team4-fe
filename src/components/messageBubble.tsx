@@ -36,7 +36,7 @@ function MessageBubble({type, senderName, data}: {type: MessageBubbleType, sende
         <p className={`${className2.text} ${className.sender} font-bold`}>{senderName}</p>
         <p className={`${className2.text} py-1`}>{data.content}</p>
         <div className='flex flex-row justify-end'>
-          <p className='text-xs'>{formatTime(data.time)}</p>
+          <p className='text-xs'>{formatTime(new Date(data.time))}</p>
           <img className='px-1' src="/src/assets/check.svg" alt="" />
         </div>
       </div>

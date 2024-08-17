@@ -1,21 +1,20 @@
 export interface Chat {
-  senderId: number;
-  userNick: string;
+  senderId: string;
+  senderName: string;
   content: string;
   contentType: string;
-  time: Date;
+  time: string;
   room: string;
 }
 
 export interface ChatWithoutSender {
-  id: number;
   content: string;
   contentType: string;
-  time: Date;
+  time: string;
 }
 
-
-export interface ChatList {
+export interface ChatGroup {
+  senderId: string;
   senderName: string;
   img: string;
   chats: ChatWithoutSender[];
