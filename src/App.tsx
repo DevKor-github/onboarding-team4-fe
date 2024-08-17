@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './index.css'
-import ChatPage from './pages/chatPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   const [isModalShow, setIsModalShow] = useState(false);
