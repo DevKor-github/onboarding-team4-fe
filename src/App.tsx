@@ -22,11 +22,13 @@ function App() {
   };
 
   const ModalButton = () => (
+    <>
     <div className="content-body">
       <div className="modal-button">
         <button onClick={() => setIsModalShow(true)}>Show offer</button>
       </div>
     </div>
+    </>
   );
 
   return (
