@@ -1,5 +1,4 @@
 import './index.css'
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Hompage.tsx';
 import Login from './pages/Login.tsx';

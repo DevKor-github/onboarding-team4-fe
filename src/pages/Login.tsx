@@ -30,15 +30,14 @@ function Login()
         navigate('/signup'); // '/signup' 경로로 네비게이션
       };
     return (
-      <div>
+      <div >
         <section className=" flex flex-col items-center p-[10%]">
         <div className='flex devkor_logo pb-[60px] pt-[50%]'>
-          <img className="w-51px h-51px flex-shrink-0" src='/src/assets/devkor_logo.svg' alt="DEVKOR Logo" />
+          <img className="w-51px h-51px flex-shrink-0" src='/src/assets/images/devkor_logo.svg' alt="DEVKOR Logo" />
           <span className="text-center font-montserrat text-[39px] font-bold leading-normal text-[#505156]">DEVKOR</span>
         </div>
-
-        <p className='text-left mr-auto text-[#2C2C2E] font-pretendard text-[18px] font-semibold pb-[5%]'>로그인</p>
-        {error && <div className='text-red-500  mr-auto text-sm'>{error}</div>}
+        <p className='text-left mr-auto font-pre text-label-300 text-[18px] font-semibold pb-[5%]'>로그인</p>
+        <div className={`text-red-500 ${error?"visible":"invisible"} mr-auto text-sm`}>{error||'placeholder'}</div>
         <form className="w-[95%]" onSubmit={handleSubmit}>
             {/* ID,PW 입력 필드 */}
             <div className='pb-[20%]'>
@@ -47,7 +46,7 @@ function Login()
                   type="text"
                   id="id"
                   name="id"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                  className="w-full px-3 h-12  py-2 border border-[#d9d9d9] rounded-md font-pre"
                   placeholder="아이디"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
@@ -59,7 +58,7 @@ function Login()
                   type="password"
                   id="password"
                   name="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                  className="w-full h-12 px-3 py-2 border border-[#d9d9d9] rounded-md font-pre"
                   placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -71,13 +70,13 @@ function Login()
               <button
                 type="button"
                 onClick={handleSignup}
-                className="flex-1 bg-[#F2F2F7] text-[#3D3D3D]    p-3 rounded-md "
+                className="flex-1 font-pre bg-onBackground text-label-200  p-3 rounded-md font-pretendard text-base font-normal leading-normal"
               >
                 회원가입
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-[#3D3D3D] text-[#FFF] p-3 rounded-md"
+                className="flex-1 font-pre bg-label-200 text-background p-3 rounded-md font-pretendard text-base font-normal leading-normal"
               >
                 로그인
               </button>
