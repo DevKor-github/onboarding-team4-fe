@@ -37,7 +37,9 @@ function ChatRoomList () {
       <ul>
         {chatRooms.map((chatRoom) => (
           <li key={chatRoom._id}>
-            <RoomTile chatRoom={chatRoom} user={chatRoom.memberList[0]} />
+            <Link to={`/chat/${chatRoom._id}`}>
+              <RoomTile chatRoom={chatRoom} user={chatRoom.memberList[0]} />
+            </Link>
           </li>
         ))}
       </ul>

@@ -4,9 +4,12 @@ import { Chat, ChatGroup } from '../api/models/chatModel';
 import { useEffect, useRef, useState } from 'react';
 import MessageGroup from '../components/messageGroup';
 import { MessageGroupType } from '../components/messageBubbleType';
+import { useParams } from 'react-router-dom';
 
 
 function ChatPage() {
+  const {chatRoomId} = useParams();
+  console.log(chatRoomId);
   const ref = useRef<HTMLDivElement>(null);
   const socket = useAtomValue(socketAtom);
   const [, setIsConnected] = useState(socket.connected);
