@@ -7,7 +7,7 @@ function RoomTile({ user }: { chatRoom: ChatRoom, user: User }) {
     <div className='flex flex-row justify-between h-[3.875rem] py-4 px-6'>
       <UserWithImg user={user} />
       <div>
-        <h3>오후 8:00</h3>
+        <span className='text-sm'>오후 8:00</span>
       </div>
     </div>
   );
