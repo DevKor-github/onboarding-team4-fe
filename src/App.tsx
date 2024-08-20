@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './index.css'
+import ChatPage from './pages/ChatPage';
 
 function App() {
   const [isModalShow, setIsModalShow] = useState(false);
@@ -21,11 +22,13 @@ function App() {
   };
 
   const ModalButton = () => (
+    <>
     <div className="content-body">
       <div className="modal-button">
         <button onClick={() => setIsModalShow(true)}>Show offer</button>
       </div>
     </div>
+    </>
   );
 
   return (
@@ -36,6 +39,7 @@ function App() {
         </>
       ):null}
       <ModalButton />
+      <ChatPage />
     </>
   )
 }
