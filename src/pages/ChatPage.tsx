@@ -105,7 +105,8 @@ function ChatPage() {
             _id: '1',
             userNick: 'user1',
             profileImage: '/src/assets/react.svg',
-        }} />   //TODO: replace this with real data
+        }} />   
+        {/* TODO: replace this with real data */}
         <button><img className='size-4' src="/src/assets/kebab-horizontal.svg" alt="" /></button>
       </div>
       <div ref={ref} className='flex-1 overflow-y-scroll p-3 pr-2 z-0'>
