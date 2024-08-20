@@ -99,7 +99,7 @@ function ChatPage() {
   return (
     <div className='flex flex-col h-screen'>
       <AppBar />
-      <div className='flex flex-row justify-between px-6 py-[0.94rem]'>
+      <div className='flex flex-row justify-between px-6 py-[0.94rem] shadow-bottom-xs'>
         <UserWithImg user=
           {{
             _id: '1',

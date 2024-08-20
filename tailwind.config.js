@@ -15,6 +15,7 @@ export default {
       },
       boxShadow: {
         'top-xs': '0px -1px 0px #E5E5EA',
+        'bottom-xs': '0px 1px 0px #E5E5EA',
       }
     },
   },
