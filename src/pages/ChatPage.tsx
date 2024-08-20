@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import MessageGroup from '../components/messageGroup';
 import { MessageGroupType } from '../components/messageBubbleType';
 import { useParams } from 'react-router-dom';
+import MessageField from '../components/MessageField';
+import AppBar from '../components/AppBar';
+import UserWithImg from '../components/UserWithImg';
 
 
 function ChatPage() {
@@ -85,17 +88,32 @@ function ChatPage() {
     };
   }, [socket]);
 
+  function onSend(message: string) {
+    socket.emit('send_message',  { content: message, contentType:'text', senderId:"adfasdlkfajs;" });
+  }
+
+  function onValidation(message: string): boolean {
+    return message !== '';
+  }
+
   return (
-    <div className='h-full bg-slate-500'>
-      <div className='flex flex-col w-96 mx-auto bg-white h-full p-0.5'>
-        <h1>Chat</h1>
-        <div ref={ref} className='overflow-y-scroll h-full p-3 pr-2'>
-          {chats.map((chatGroup: ChatGroup) => (
-            <MessageGroup type={socket.id === chatGroup.senderId ? MessageGroupType.RIGHT : MessageGroupType.LEFT} data={chatGroup}/>
-          ))}
-        </div>
-        <button onClick={() => socket.emit('send_message', { content: 'Hello, world!', contentType:'text', senderId:"adfasdlkfajs;" })}>send chat</button>
+    <div className='flex flex-col h-screen'>
+      <AppBar />
+      <div className='flex flex-row justify-between px-6 py-[0.94rem]'>
+        <UserWithImg user=
+          {{
+            _id: '1',
+            userNick: 'user1',
+            profileImage: '/src/assets/react.svg',
+        }} />   //TODO: replace this with real data
+        <button><img className='size-4' src="/src/assets/kebab-horizontal.svg" alt="" /></button>
       </div>
+      <div ref={ref} className='flex-1 overflow-y-scroll p-3 pr-2 z-0'>
+        {chats.map((chatGroup: ChatGroup) => (
+          <MessageGroup type={socket.id === chatGroup.senderId ? MessageGroupType.RIGHT : MessageGroupType.LEFT} data={chatGroup}/>
+        ))}
+      </div>
+      <MessageField onSend={onSend} onVaidation={onValidation}/>
     </div>
   );
 }
