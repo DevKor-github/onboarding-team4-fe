@@ -70,13 +70,13 @@ function Login()
               <button
                 type="button"
                 onClick={handleSignup}
-                className="flex-1 font-pre bg-onBackground text-label-200  p-3 rounded-md font-pretendard text-base font-normal leading-normal"
+                className="flex-1 font-pre bg-onBackground text-label-200  p-3 rounded-md text-base font-normal leading-normal"
               >
                 회원가입
               </button>
               <button
                 type="submit"
-                className="flex-1 font-pre bg-label-200 text-background p-3 rounded-md font-pretendard text-base font-normal leading-normal"
+                className="flex-1 font-pre bg-label-200 text-background p-3 rounded-md text-base font-normal leading-normal"
               >
                 로그인
               </button>

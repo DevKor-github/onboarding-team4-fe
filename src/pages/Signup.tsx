@@ -1,5 +1,6 @@
 
-import { useState,FormEvent,ChangeEvent } from 'react'
+import { useState,FormEvent,ChangeEvent,useRef } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function Signup() 
 {
@@ -8,6 +9,8 @@ function Signup()
     const [error, setError] = useState<string>('');
     const [confirmPassword,setConfirmPassword]=useState<string>('');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+    const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
     // 폼 제출 핸들러
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
@@ -15,28 +18,37 @@ function Signup()
         setSelectedImage(URL.createObjectURL(file));
       }
     };
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault(); 
-        // 서버로 데이터 전송
-        //try사용하기
-        const response = await fetch('/api/signup', {
-          method: 'POST',
-          body: JSON.stringify({ id, password }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-      const data = await response.json();
-      console.log(data);    
-    
 
-  }
-    const handleSignup = () => {
-      // 회원가입 버튼 클릭 시 처리
-      console.log('회원가입 버튼 클릭됨');
+  const handleSignup = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (recaptchaRef.current) {
+      const token = await recaptchaRef.current.executeAsync(); // reCAPTCHA 실행 후 토큰 획득
+      if (token) {
+        submitSignupForm(token);
+      }
+    }
+  };
 
-    };
+  const submitSignupForm = async (token: string) => {
+    try {
+      const response = await fetch('https://hoddeeg.request.dreamhack.games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+      console.log(response.text)
+      if (response.ok) {
+        console.log('Signup successful');
+      } else {
+        console.error('Signup failed');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+    }
+  };
+
     return (
         <div>
         <section className=" flex flex-col items-center p-[10%]">
@@ -45,9 +57,9 @@ function Signup()
           <span className="text-center font-montserrat text-[39px] font-bold leading-normal text-[#505156]">DEVKOR</span>
         </div>
 
-        <p className='text-left mr-auto text-label-300 font-pretendard text-[18px] font-semibold pb-[5%] font-pre'>회원가입</p>
+        <p className='text-left mr-auto text-label-300  text-[18px] font-semibold pb-[5%] font-pre'>회원가입</p>
         <div className={`text-red-500 ${error?"visible":"invisible"} mr-auto text-sm`}>{error||'placeholder'}</div>
-        <form className="w-[95%]" onSubmit={handleSubmit}>
+        <form className="w-[95%]" onSubmit={handleSignup}>
             {/* ID,PW 입력 필드 */}
             <div className='pb-[20%]'>
               <div className="w-full mt-4 flex">
@@ -115,9 +127,13 @@ function Signup()
             
             {/*로그인,회원가입 버튼 */}
             <div className="mt-6 flex space-x-4">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={recaptchaPublicKey} // 공개키를 여기에 설정하세요.
+              size="invisible" // Invisible reCAPTCHA 설정
+            />
               <button
-                type="button"
-                onClick={handleSignup}
+                type="submit"
                 className="flex-1 bg-label-200 text-background p-3 rounded-md font-pre"
               >
                 회원가입
