@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChatRoom } from '../api/models/ChatRoom';
+import { Link } from 'react-router-dom';
 import AppBar from '../components/AppBar';
 import RoomTile from '../components/RoomTile';
 
@@ -28,16 +29,18 @@ function ChatRoomList () {
   }, []);
 
   return (
-    <div>
+    <div className='flex flex-col h-screen'>
       <AppBar />
       <div className='px-6 py-[0.94rem]'>
         <h1>채팅</h1>
       </div>
-      <div className='h-2.5 bg-[#FAFAFA]'></div>
-      <ul>
+      <div className='h-2.5 w-full bg-[#FAFAFA]'></div>
+      <ul className='flex-1 overflow-y-scroll'>
         {chatRooms.map((chatRoom) => (
           <li key={chatRoom._id}>
-            <RoomTile chatRoom={chatRoom} user={chatRoom.memberList[0]} />
+            <Link to={`/chat/${chatRoom._id}`}>
+              <RoomTile chatRoom={chatRoom} user={chatRoom.memberList[0]} />
+            </Link>
           </li>
         ))}
       </ul>
