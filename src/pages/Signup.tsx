@@ -1,5 +1,7 @@
 
 import { useState,FormEvent,ChangeEvent,useRef } from 'react'
+import { useQuery } from '@tanstack/react-query';
+import { getData } from '../utils/APIUtils.ts'; 
 import ReCAPTCHA from 'react-google-recaptcha';
 
 function Signup() 
@@ -8,6 +10,7 @@ function Signup()
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [confirmPassword,setConfirmPassword]=useState<string>('');
+    const [idCheckStatus, setIdCheckStatus] = useState<string>('');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
@@ -18,7 +21,6 @@ function Signup()
         setSelectedImage(URL.createObjectURL(file));
       }
     };
-
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
     if (recaptchaRef.current) {
@@ -28,25 +30,26 @@ function Signup()
       }
     }
   };
+  const { data: idCheckResult  } = useQuery({
+    queryKey:['checkUsername', id],
+    queryFn:async () => {
+      const response = await getData(`/user/${id}`);
+      console.log(response)
+    }
+      
+  }
+
+  );
+
+
+  const handleIdCheck=()=>{
+
+    console.log(idCheckResult);
+
+  }
 
   const submitSignupForm = async (token: string) => {
-    try {
-      const response = await fetch('https://hoddeeg.request.dreamhack.games', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-      console.log(response.text)
-      if (response.ok) {
-        console.log('Signup successful');
-      } else {
-        console.error('Signup failed');
-      }
-    } catch (error) {
-      console.error('Error during signup:', error);
-    }
+   //회원가입 axios
   };
 
     return (
@@ -71,8 +74,10 @@ function Signup()
                   placeholder="아이디"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
+                  required
                 />
-                <button className='bg-[#3D3D3D] ml-3 px-3 text-background whitespace-nowrap rounded-md font-pre'>
+                <button className='bg-[#3D3D3D] ml-3 px-3 text-background whitespace-nowrap rounded-md font-pre'
+                onClick={handleIdCheck}>
                     중복확인
                 </button>
               </div>
@@ -86,6 +91,7 @@ function Signup()
                   placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
 
@@ -99,6 +105,7 @@ function Signup()
                   placeholder="비밀번호 확인"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
                 />
               </div>
 

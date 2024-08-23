@@ -1,29 +1,20 @@
 
 import { useState,FormEvent} from 'react'
+import { useQuery } from '@tanstack/react-query';
+import { getData } from '../utils/APIUtils.ts'; 
 import { useNavigate } from 'react-router-dom';
 function Login() 
 {
     const [id, setId] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+
     // 폼 제출 핸들러
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault(); 
-        // 서버로 데이터 전송
-        //try사용하기
-        const response = await fetch('/api/login', {//링크는 교체
-          method: 'POST',
-          body: JSON.stringify({ id, password }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      console.log(id)
-      //const data = await response.json();
-      
-      setError('에러에요')
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {//폼전송
+
 
   }
+
     const navigate = useNavigate(); 
 
       const handleSignup = () => {
@@ -50,6 +41,7 @@ function Login()
                   placeholder="아이디"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
+                  required
                 />
               </div>
 
@@ -62,6 +54,7 @@ function Login()
                   placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
             </div>
