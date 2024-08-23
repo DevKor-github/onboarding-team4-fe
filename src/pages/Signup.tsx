@@ -1,6 +1,6 @@
 
 import { useState,FormEvent,ChangeEvent,useRef } from 'react'
-import { useQuery } from '@tanstack/react-query';
+import { useQuery,useMutation  } from '@tanstack/react-query';
 import { getData } from '../utils/APIUtils.ts'; 
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -10,7 +10,7 @@ function Signup()
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [confirmPassword,setConfirmPassword]=useState<string>('');
-    const [idCheckStatus, setIdCheckStatus] = useState<string>('');
+    const [idCheckStatus, setIdCheckStatus] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
@@ -30,23 +30,35 @@ function Signup()
       }
     }
   };
-  const { data: idCheckResult  } = useQuery({
-    queryKey:['checkUsername', id],
-    queryFn:async () => {
-      const response = await getData(`/user/${id}`);
-      console.log(response)
+
+
+  
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response:{res:string} = await getData(`/user/idJungbok?id=${id}`);
+      return response.res;
+    },
+    onSuccess: (data) => {
+      if(data==='true')
+      {
+        setIdCheckStatus(true)
+        if(error=='이미 존재하는 id입니다.')
+          setError('')
+      }
+      else
+        setError('이미 존재하는 id입니다.')
+    },
+    onError: () => {
+      setError('error')
     }
-      
-  }
+  });
 
-  );
+  const handleIdCheck = () => {
+    mutation.mutate();
+  };
 
 
-  const handleIdCheck=()=>{
 
-    console.log(idCheckResult);
-
-  }
 
   const submitSignupForm = async (token: string) => {
    //회원가입 axios
@@ -75,6 +87,7 @@ function Signup()
                   value={id}
                   onChange={(e) => setId(e.target.value)}
                   required
+                  disabled={idCheckStatus}
                 />
                 <button className='bg-[#3D3D3D] ml-3 px-3 text-background whitespace-nowrap rounded-md font-pre'
                 onClick={handleIdCheck}>
