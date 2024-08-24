@@ -67,11 +67,11 @@ function ChatPage() {
       addChat(chat);
     }
 
-    function onUserList(room: string, userList: string[]) {
+    function onUserList( userList: string[]) {
       console.log(userList);
     }
 
-    function onLoadChats(chats: Chat[]) {
+    function onLoadChats() {
       //addChats(chats);
     }
 

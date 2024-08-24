@@ -50,7 +50,7 @@ function ChatRoomListPage () {
       }
       return <>
         {loadingChatRoomTiles}
-        {chatRooms.status === 'error' ? <Modal 
+        {chatRooms.status === 'error' && showModal ? <Modal 
         title={<h1 className=''>Error</h1>} 
         body={<p>에러가 발생하였습니다. 잠시후에 다시 시도해 주세요</p>} 
         footer={<button onClick={() => setShowModal(false)} className='w-full bg-primary rounded-md py-2 text-white'>close</button>}
