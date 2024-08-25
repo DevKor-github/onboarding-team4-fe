@@ -1,8 +1,10 @@
 
 import { useState,FormEvent,ChangeEvent,useRef } from 'react'
-import { useQuery,useMutation  } from '@tanstack/react-query';
-import { getData } from '../utils/APIUtils.ts'; 
+import { useMutation  } from '@tanstack/react-query';
+import { getData,postData} from '../utils/APIUtils.ts'; 
 import ReCAPTCHA from 'react-google-recaptcha';
+import axios, { AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() 
 {
@@ -10,36 +12,103 @@ function Signup()
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [confirmPassword,setConfirmPassword]=useState<string>('');
+    const [userName,setUserName]=useState<string>('');
     const [idCheckStatus, setIdCheckStatus] = useState<boolean>(false);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imgUrl, setImgUrl] = useState<string>('');
+    const [recaptchaToken, setRecaptchaToken] = useState<string>('');
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
-    const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
+    const recaptchaPublicKey:string ='6LeaDi4qAAAAAP4Z9sI8QmAtK9cBPJTniOOFNsGw'
     // 폼 제출 핸들러
+    const navigate = useNavigate(); 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0];
-        setSelectedImage(URL.createObjectURL(file));
+        setSelectedFile(file); // 파일을 상태로 저장
       }
     };
+
+    //회원가입
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
     if (recaptchaRef.current) {
       const token = await recaptchaRef.current.executeAsync(); // reCAPTCHA 실행 후 토큰 획득
       if (token) {
-        submitSignupForm(token);
+        setRecaptchaToken(token)
+        submitSignupForm();
       }
     }
   };
 
+  const submitSignupForm = async () => {
+    if(confirmPassword===password)
+      if(idCheckStatus===true)
+        postSignup.mutate();
+      else
+        setError('id중복확인을 해주세요.')
+    else
+      setError('비밀번호와 비밀번호 확인이 서로 다릅니다.')
 
-  
-  const mutation = useMutation({
+  };
+
+
+  const postSignup=useMutation({
     mutationFn: async () => {
-      const response:{res:string} = await getData(`/user/idJungbok?id=${id}`);
-      return response.res;
+      if (selectedFile) {
+      const imgformData = new FormData();
+      imgformData.append('image', selectedFile);
+      const response = await axios.post('/File/upload', imgformData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // FormData 전송을 위한 헤더 설정
+        },
+      });
+      setImgUrl(response.data.url)
+      }
+      const formData = new FormData();
+      formData.append('userId', id);
+      formData.append('password',password);
+      formData.append('userNick', userName);
+      formData.append('recaptchaToken', recaptchaToken);
+      if(imgUrl){
+        formData.append('profileImage', imgUrl);
+      }
+      
+
+      
+
+      const response = await axios.post('/auth/signup', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // FormData 전송을 위한 헤더 설정
+        },
+      });
+      console.log(response.data)
+      return response.data;
     },
     onSuccess: (data) => {
       if(data==='true')
+      {
+        navigate('/login'); 
+      }
+      else
+      {
+        setError('회원가입 실패.')
+      }
+    },
+    onError: () => {
+      setError('error')
+    }
+  });
+
+  //id중복 검사
+  const idcheck = useMutation({
+    mutationFn: async () => {
+      //const response: boolean = (await axios.get(`/user/idJungbok?id=${id}`)).data;
+      const response = await postData(`/user/idJungbok`, { id: id,});
+      return response;
+    },
+    onSuccess: (data) => {
+      console.log(data)
+      if(data==true)
       {
         setIdCheckStatus(true)
         if(error=='이미 존재하는 id입니다.')
@@ -48,21 +117,19 @@ function Signup()
       else
         setError('이미 존재하는 id입니다.')
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error)
       setError('error')
     }
   });
 
   const handleIdCheck = () => {
-    mutation.mutate();
+    idcheck.mutate();
   };
 
 
 
 
-  const submitSignupForm = async (token: string) => {
-   //회원가입 axios
-  };
 
     return (
         <div>
@@ -94,6 +161,18 @@ function Signup()
                     중복확인
                 </button>
               </div>
+                <div className="w-full mt-4">
+                  <input
+                    type="userName"
+                    id="userName"
+                    name="userName"
+                    className="w-full h-12 px-3 py-2 border border-[#d9d9d9] rounded-md font-pre"
+                    placeholder="사용자 이름"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    required
+                  />
+                </div>
 
               <div className="w-full mt-4">
                 <input
@@ -125,7 +204,7 @@ function Signup()
 
             <div className="flex bg-[#F4F4F4] w-full mt-4">
               <label className="w-full h-12 flex items-center border border-[#d9d9d9]  rounded-md overflow-hidden">
-                {selectedImage ? (
+                {selectedFile ? (
                   <div className='px-3 font-pre text-[#D9D9D9]'>업로드 성공</div>
                 ) : (
                   <div className="flex items-center justify-center  ">

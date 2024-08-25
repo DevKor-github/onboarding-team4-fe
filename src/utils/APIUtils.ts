@@ -1,6 +1,6 @@
 import axios, {
   AxiosInstance,
-  AxiosRequestConfig,
+  AxiosRequestConfig
 } from "axios";
 
 interface APIResponse<T> {
@@ -31,7 +31,7 @@ const client: AxiosInstance = axios.create({
 const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Promise<T> => {
   try {
     const response : APIResponse<T> = await callback();
-    console.log(response.message);
+    console.log(response);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -69,6 +69,8 @@ export const getData = async <T>(
     return response.data;
   });
 };
+
+
 
 /**
  * Makes a POST request to the specified URL and returns the data field inside the APIResponse
