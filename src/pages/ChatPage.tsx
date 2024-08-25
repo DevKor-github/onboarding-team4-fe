@@ -4,14 +4,16 @@ import { Chat, ChatGroup } from '../api/models/chatModel';
 import { useEffect, useRef, useState } from 'react';
 import MessageGroup from '../components/messageGroup';
 import { MessageGroupType } from '../components/messageBubbleType';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import MessageField from '../components/MessageField';
 import AppBar from '../components/AppBar';
 import UserWithImg from '../components/UserWithImg';
+import { ChatRoom } from '../api/models/ChatRoom';
 
 
 function ChatPage() {
   const {chatRoomId} = useParams();
+  const chatRoom : ChatRoom = useLocation().state;
   console.log(chatRoomId);
   const ref = useRef<HTMLDivElement>(null);
   const socket = useAtomValue(socketAtom);
@@ -96,17 +98,12 @@ function ChatPage() {
     return message !== '';
   }
 
+  console.log(chatRoom);
   return (
     <div className='flex flex-col h-screen'>
       <AppBar />
       <div className='flex flex-row justify-between px-6 py-[0.94rem] shadow-bottom-xs'>
-        <UserWithImg user=
-          {{
-            _id: '1',
-            userNick: 'user1',
-            profileImage: '/src/assets/react.svg',
-        }} />   
-        {/* TODO: replace this with real data */}
+        <UserWithImg user={chatRoom.memberList[0]} />
         <button><img className='size-4' src="/src/assets/kebab-horizontal.svg" alt="" /></button>
       </div>
       <div ref={ref} className='flex-1 overflow-y-scroll p-3 pr-2 z-0'>
