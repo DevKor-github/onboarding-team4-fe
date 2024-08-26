@@ -1,7 +1,7 @@
 import { ChatWithoutSender } from '../api/models/chatModel';
 import { MessageBubbleType } from './messageBubbleType';
 
-function MessageBubble({type, senderName, data}: {type: MessageBubbleType, senderName: string, data: ChatWithoutSender}) {
+function MessageBubble({ type, senderName, data}: {type: MessageBubbleType, senderName: string, data: ChatWithoutSender}) {
 
   const className = {
     [MessageBubbleType.LEFT]: {

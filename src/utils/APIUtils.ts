@@ -28,7 +28,7 @@ const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Prom
     console.log("handleAxiosError");
     const response : APIResponse<T> = await callback();
     console.log("dsf",response.message);
-    return response.data;
+    return response;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response) {

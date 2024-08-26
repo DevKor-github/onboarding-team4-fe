@@ -10,7 +10,7 @@ function UserWithImg({user}: {user: User | null}) {
   }
   return (
     <div className='flex flex-row items-center gap-2'>
-      <img className='h-full' src={user?.profileImage ?? '/src/assets/profile_image_plain.svg'} alt={user?.userNick ?? ''} />
+      <img className='h-full' src={user?.profileImage === '' ? '/src/assets/profile_image_plain.svg':user.profileImage} alt={user?.userNick ?? ''} />
       <span className=' text-sm h-fit'>{user?.userNick}</span>
     </div>
   );

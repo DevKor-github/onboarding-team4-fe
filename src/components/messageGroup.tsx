@@ -22,7 +22,7 @@ function MessageGroup({type, data}: {type: MessageGroupType, data: ChatGroup}) {
       <div className={`flex flex-col max-w-64 ${className["col"]}`}>
         
         {data.chats.map((chat, index) => (
-          <MessageBubble type={ index !== 0 ? MessageBubbleType.NONE :  type === MessageGroupType.LEFT ? MessageBubbleType.LEFT : MessageBubbleType.RIGHT} senderName={data.senderName} data={chat}/>
+          <MessageBubble key={index} type={ index !== 0 ? MessageBubbleType.NONE :  type === MessageGroupType.LEFT ? MessageBubbleType.LEFT : MessageBubbleType.RIGHT} senderName={data.senderName} data={chat}/>
         ))}
       </div>
     </div>
