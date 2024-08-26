@@ -4,7 +4,7 @@ import { Chat, ChatGroup } from '../api/models/chatModel';
 import { useEffect, useRef, useState } from 'react';
 import MessageGroup from '../components/messageGroup';
 import { MessageGroupType } from '../components/messageBubbleType';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import MessageField from '../components/MessageField';
 import AppBar from '../components/AppBar';
 import UserWithImg from '../components/UserWithImg';
@@ -12,9 +12,8 @@ import { ChatRoom } from '../api/models/ChatRoom';
 
 
 function ChatPage() {
-  const {chatRoomId} = useParams();
+
   const chatRoom : ChatRoom = useLocation().state;
-  console.log(chatRoomId);
   const ref = useRef<HTMLDivElement>(null);
   const socket = useAtomValue(socketAtom);
   const [, setIsConnected] = useState(socket.connected);
@@ -22,7 +21,7 @@ function ChatPage() {
 
   function addChat(chat: Chat) {
     setChats((prev) => {
-        if (prev.length !== 0 && prev[prev.length - 1].senderId === chat.senderId) {
+        if (prev.length !== 0 && prev[prev.length - 1].senderId === chat.userId) {
           const lastGroup = prev[prev.length - 1];
           lastGroup.chats.push({
             content: chat.content,
@@ -31,7 +30,7 @@ function ChatPage() {
           });
         } else {
         prev.push({
-          senderId: chat.senderId,
+          senderId: chat.userId,
           senderName: chat.senderName,
           img: '/src/assets/__avatar_url.png',
           chats: [
@@ -46,6 +45,42 @@ function ChatPage() {
       console.log(prev);
       return [...prev];
     });
+  }
+
+  function ChatListToChatGroupList(chats: Chat[]): ChatGroup[] {
+    const chatGroupList: ChatGroup[] = [];
+    let lastSenderId = '';
+    let lastGroup: ChatGroup = {
+      senderId: '',
+      senderName: '',
+      img: '',
+      chats: [],
+    };
+    chats.forEach((chat) => {
+      if (lastSenderId === chat.userId) {
+        lastGroup.chats.push({
+          content: chat.content,
+          contentType: chat.contentType,
+          time: chat.time,
+        });
+      } else {
+        lastGroup = {
+          senderId: chat.userId,
+          senderName: chat.senderName,
+          img: '/src/assets/__avatar_url.png',
+          chats: [
+            {
+              content: chat.content,
+              contentType: chat.contentType,
+              time: chat.time,
+            },
+          ],
+        };
+        chatGroupList.push(lastGroup);
+      }
+      lastSenderId = chat.userId;
+    });
+    return chatGroupList;
   }
 
   useEffect(() => {
@@ -67,31 +102,36 @@ function ChatPage() {
       addChat(chat);
     }
 
-    function onUserList(room: string, userList: string[]) {
+
+    function onUserList(userList: string[]) {
       console.log(userList);
     }
 
     function onLoadChats(chats: Chat[]) {
-      //addChats(chats);
+      console.log(chats);
+      setChats(ChatListToChatGroupList(chats));
     }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    socket.on('receive_message', onReceiveMessage);
+    socket.on('receiveMessage', onReceiveMessage);
     socket.on('userList', onUserList);
-    socket.on('loadChats', onLoadChats);
+    socket.on('previousMessages', onLoadChats);
 
-    socket.emit('join', 'all');
+    socket.emit('joinChat', {roomId: chatRoom._id});
+
+    console.log(socket);
+
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-      socket.off('receive_message', onReceiveMessage);
+      socket.off('receiveMessage', onReceiveMessage);
     };
-  }, [socket]);
+  }, [chatRoom._id, socket]);
 
   function onSend(message: string) {
-    socket.emit('send_message',  { content: message, contentType:'text', senderId:"adfasdlkfajs;" });
+    socket.emit('sendMessage',  { content: message, roomId: chatRoom._id, senderId:"adfasdlkfajs;" });
   }
 
   function onValidation(message: string): boolean {
@@ -107,8 +147,8 @@ function ChatPage() {
         <button><img className='size-4' src="/src/assets/kebab-horizontal.svg" alt="" /></button>
       </div>
       <div ref={ref} className='flex-1 overflow-y-scroll p-3 pr-2 z-0'>
-        {chats.map((chatGroup: ChatGroup) => (
-          <MessageGroup type={socket.id === chatGroup.senderId ? MessageGroupType.RIGHT : MessageGroupType.LEFT} data={chatGroup}/>
+        {chats.map((chatGroup: ChatGroup, index: number) => (
+          <MessageGroup key={index} type={chatRoom.memberList[0]._id !== chatGroup.senderId ? MessageGroupType.RIGHT : MessageGroupType.LEFT} data={chatGroup}/>
         ))}
       </div>
       <MessageField onSend={onSend} onVaidation={onValidation}/>

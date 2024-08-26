@@ -1,7 +1,8 @@
 import { ChatWithoutSender } from '../api/models/chatModel';
 import { MessageBubbleType } from './messageBubbleType';
+import checkImage from '../assets/check.svg';
 
-function MessageBubble({type, senderName, data}: {type: MessageBubbleType, senderName: string, data: ChatWithoutSender}) {
+function MessageBubble({ type, senderName, data}: {type: MessageBubbleType, senderName: string, data: ChatWithoutSender}) {
 
   const className = {
     [MessageBubbleType.LEFT]: {
@@ -37,7 +38,7 @@ function MessageBubble({type, senderName, data}: {type: MessageBubbleType, sende
         <p className={`${className2.text} py-1 break-words`}>{data.content}</p>
         <div className='flex flex-row justify-end'>
           <p className='text-xs'>{formatTime(new Date(data.time))}</p>
-          <img className='px-1' src="/src/assets/check.svg" alt="" />
+          <img className='px-1' src={checkImage} alt="" />
         </div>
       </div>
     </div>

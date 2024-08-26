@@ -33,4 +33,8 @@ export const addChatRoomAtom = atomWithMutation<ChatRoom, {opponentId: string[]}
   onSuccess: (result) => {
     console.log(result);
   }
+
 })); 
+
+
+

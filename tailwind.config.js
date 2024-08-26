@@ -18,7 +18,10 @@ export default {
       pre: ['Pretendard'],
       montserrat: ['Montserrat', 'sans-serif'],
     },
-  }
-  },
-  plugins: [],
-};
+      boxShadow: {
+        'top-xs': '0px -1px 0px #E5E5EA',
+        'bottom-xs': '0px 1px 0px #E5E5EA',
+      }
+    },
+     plugins: [],
+  };

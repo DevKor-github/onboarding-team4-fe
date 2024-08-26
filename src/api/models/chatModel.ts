@@ -1,8 +1,8 @@
 export interface Chat {
-  senderId: string;
+  userId: string;
   senderName: string;
-  content: string;
   contentType: string;
+  content: string;
   time: string;
   room: string;
 }

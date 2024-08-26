@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import smiley from '../assets/smiley.svg';
+
 
 function MessageField({onSend, onVaidation}: {onSend: (message: string) => void, onVaidation: (message: string) => boolean}) {
   const [message, setMessage] = useState<string>("");
@@ -14,7 +16,7 @@ function MessageField({onSend, onVaidation}: {onSend: (message: string) => void,
   return (
     <div className='flex flex-row gap-3 px-6 pt-3 pb-7 z-10 shadow-top-xs bg-background' onSubmit={onSubmit}>
       <button>
-        <img className='w-6 h-6' src="/src/assets/smiley.svg" alt="" />
+        <img className='w-6 h-6' src={smiley} alt="" />
       </button>
       <form className='w-full flex flex-row gap-4 py-3 px-5 rounded-full bg-onBackground'>
         <input value={message} placeholder='Start typing...' onChange={(e) =>setMessage(e.target.value)} className='flex-1 bg-transparent focus:border-none focus:outline-none' type="text" />

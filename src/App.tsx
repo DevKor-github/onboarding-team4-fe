@@ -6,6 +6,7 @@ import Layout from './pages/Layout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
+
 function App() {
 
   const router = createBrowserRouter(
@@ -15,6 +16,7 @@ function App() {
         <Route path='chat/:chatRoomId' element={<ChatPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
       </Route>
     )
   )

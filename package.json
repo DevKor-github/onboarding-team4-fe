@@ -10,14 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.52.0",
+    "@tanstack/query-core": "^5.51.21",
+    "@tanstack/react-query": "^5.51.21",
     "@tanstack/react-query-devtools": "^5.51.21",
     "axios": "^1.7.3",
     "jotai": "^2.9.1",
-    "jotai-tanstack-query": "^0.8.7",
+    "jotai-tanstack-query": "^0.8.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-google-recaptcha": "^3.1.0",
+
     "react-router-dom": "^6.26.1",
     "socket.io-client": "^4.7.5"
   },
