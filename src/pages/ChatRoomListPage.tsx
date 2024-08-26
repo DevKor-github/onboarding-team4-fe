@@ -14,6 +14,7 @@ function ChatRoomListPage () {
   const [showModal, setShowModal] = useState(true);
   const [addChatRoomModal, setAddChatRoomModal] = useState(false);
 
+
   useEffect(() => {
     const fetchChatRooms = async () => {
       const tmpChatRooms = [];
@@ -34,6 +35,7 @@ function ChatRoomListPage () {
 
     fetchChatRooms();
   }, []);
+
 
   function ChatRoomList() {
     console.log("status", chatRooms.status);
@@ -65,6 +67,7 @@ function ChatRoomListPage () {
       ))}
     </ul>;
   }
+
 
   return (
     <div className='flex flex-col h-screen'>

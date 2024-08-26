@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import smiley from '../assets/smiley.svg';
 
+
 function MessageField({onSend, onVaidation}: {onSend: (message: string) => void, onVaidation: (message: string) => boolean}) {
   const [message, setMessage] = useState<string>("");
 

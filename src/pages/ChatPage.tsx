@@ -12,6 +12,7 @@ import { ChatRoom } from '../api/models/ChatRoom';
 
 
 function ChatPage() {
+
   const chatRoom : ChatRoom = useLocation().state;
   const ref = useRef<HTMLDivElement>(null);
   const socket = useAtomValue(socketAtom);
@@ -101,6 +102,7 @@ function ChatPage() {
       addChat(chat);
     }
 
+
     function onUserList(userList: string[]) {
       console.log(userList);
     }
@@ -119,6 +121,7 @@ function ChatPage() {
     socket.emit('joinChat', {roomId: chatRoom._id});
 
     console.log(socket);
+
 
     return () => {
       socket.off('connect', onConnect);

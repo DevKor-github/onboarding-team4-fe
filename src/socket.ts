@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
 import { io } from 'socket.io-client';
+
 import { userTokenAtom } from './atom/userAtom';
 
 export const socketAtom = atom((get) => {
@@ -11,3 +12,4 @@ export const socketAtom = atom((get) => {
   });
   return socket;
 });
+

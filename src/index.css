@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: Pretendard;
+    font-weight: 400;
+    src: local("Pretendard Regular"),
+    url("./assets/fonts/Pretendard/Pretendard-Regular.woff") format('woff'),
+    url("./assets/fonts/Pretendard/Pretendard-Regular.woff2") format('woff2');
+  }
+  
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 500;
+    src: local("Pretendard Medium"),
+    url("./assets/fonts/Pretendard/Pretendard-Medium.woff") format('woff'),
+    url("./assets/fonts/Pretendard/Pretendard-Medium.woff2") format('woff2');
+  }
+  
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 700;
+    src: local("Pretendard Bold"),
+    url("./assets/fonts/Pretendard/Pretendard-Bold.woff") format('woff'),
+    url("./assets/fonts/Pretendard/Pretendard-Bold.woff2") format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('./assets/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+  }
+
 html, body, #root, #app, #app>div {
   height: 100%
 }
@@ -44,3 +75,4 @@ html, body, #root, #app, #app>div {
     @apply animate-pulse bg-gray-200 rounded-md h-8 w-1/2;
   }
 }
+
