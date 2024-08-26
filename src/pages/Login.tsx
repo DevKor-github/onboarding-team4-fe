@@ -1,7 +1,7 @@
 
 import { useState,useRef} from 'react'
 import { useMutation  } from '@tanstack/react-query';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAtom } from 'jotai';
@@ -17,10 +17,7 @@ function Login()
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const [, setUserToken] = useAtom(userTokenAtom);
 
-    const postData = async <T, U>(url: string, data: U): Promise<T> => {
-      const response: AxiosResponse<T> = await axios.post(url, data);
-      return response.data;
-    };
+
     
 const LoginSubmit = useMutation({
     mutationFn: async () => {
