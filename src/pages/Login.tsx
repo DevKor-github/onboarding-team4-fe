@@ -4,6 +4,9 @@ import { useMutation  } from '@tanstack/react-query';
 import axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useAtom } from 'jotai';
+import { userTokenAtom } from '../atom/userAtom';
+
 function Login() 
 {
     const [id, setId] = useState<string>('');
@@ -12,7 +15,7 @@ function Login()
     const [recaptchaToken, setRecaptchaToken] = useState<string>('');
     const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
-   
+    const [, setUserToken] = useAtom(userTokenAtom);
     interface LoginRequest {
       userId: string;
       password: string;
@@ -38,8 +41,11 @@ const LoginSubmit = useMutation({
       console.log(data.messsage)
       if(data.messsage==='success')
       {
-        setError('로그인 성공')
-        //성공시 코드 추가
+       //setError('로그인 성공')
+        const token:string=data.accessToken;
+        setUserToken(token)
+        console.log(token)
+        navigate('/'); 
       }
       else
       {
