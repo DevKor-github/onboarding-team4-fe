@@ -5,7 +5,7 @@ import { userTokenAtom } from './atom/userAtom';
 
 export const socketAtom = atom((get) => {
   const token = get(userTokenAtom);
-  const socket = io('http://localhost:3000/chat',{
+  const socket = io(`${import.meta.env.VITE_API_URL as string}/chat`,{
     extraHeaders: {
       authorization: `Bearer ${token}`
     }
