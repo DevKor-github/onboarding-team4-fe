@@ -35,7 +35,7 @@ function Signup()
       const token = await recaptchaRef.current.executeAsync(); // reCAPTCHA 실행 후 토큰 획득
       if (token) {
         setRecaptchaToken(token)
-        submitSignupForm();
+        await submitSignupForm();
       }
     }
   };
@@ -61,8 +61,9 @@ function Signup()
         headers: {
           'Content-Type': 'multipart/form-data', // FormData 전송을 위한 헤더 설정
         },
-      });
-      setImgUrl(response.data.url)
+      });//api
+      setImgUrl(response.data.data.url)
+      //console.log(response.data.data.url)
       }
       const formData = new FormData();
       formData.append('userId', id);
@@ -74,17 +75,12 @@ function Signup()
       }
       formData.append('recaptchaToken', recaptchaToken);
 
-      
 
       
-
-      const response = await axios.post('/auth/signup', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // FormData 전송을 위한 헤더 설정
-        },
-      });
-      //console.log(response.data)
-      return response.data;
+      //console.log('aa')
+      const response = await axios.post('/auth/signup', {userId:id,password:password,userNick:userName,profileImage:imgUrl,recaptchaToken:recaptchaToken});//api
+      console.log(response.data.data)
+      return response.data.data;
     },
     onSuccess: (data) => {
       if(data.message==="Success")
@@ -104,9 +100,9 @@ function Signup()
   //id중복 검사
   const idcheck = useMutation({
     mutationFn: async () => {
-      const response: boolean = (await axios.get(`/user/idJungbok?id=${id}`)).data;
-
-      return response;
+      const response: {message:string,data:boolean} = (await axios.get(`/user/idJungbok?id=${id}`)).data;//api
+      console.log(response)
+      return response.data;
     },
     onSuccess: (data) => {
       //console.log(data)
