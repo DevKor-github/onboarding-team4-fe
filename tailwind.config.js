@@ -23,5 +23,6 @@ export default {
         'bottom-xs': '0px 1px 0px #E5E5EA',
       }
     },
+  }
      plugins: [],
   };
