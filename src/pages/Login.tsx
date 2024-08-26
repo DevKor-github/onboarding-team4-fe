@@ -13,7 +13,7 @@ function Login()
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [recaptchaToken, setRecaptchaToken] = useState<string>('');
-    const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
+   const recaptchaPublicKey:string ='6LeaDi4qAAAAAP4Z9sI8QmAtK9cBPJTniOOFNsGw'
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const [, setUserToken] = useAtom(userTokenAtom);
 
@@ -24,10 +24,11 @@ function Login()
     
 const LoginSubmit = useMutation({
     mutationFn: async () => {
-      const response:{messsage:string,accessToken:string} = await postData(`/auth/login`
+      const response:{data:{message:string,data:{messsage:string,accessToken:string}}} = await axios.post(`/auth/login`
         , { userId: id, password: password, recaptchaToken: recaptchaToken }
-      );
-      return response;
+      );//api
+      console.log(response.data)
+      return response.data.data;
     },
     onSuccess: (data) => {
       console.log(data.messsage)
@@ -45,7 +46,7 @@ const LoginSubmit = useMutation({
       }
     },
     onError: () => {
-      setError('error')
+      setError('아이디 또는 비밀번호가 올바르지 않습니다.')
     }
   });
 
@@ -55,7 +56,8 @@ const LoginSubmit = useMutation({
       const token = await recaptchaRef.current.executeAsync(); // reCAPTCHA 실행 후 토큰 획득
       if (token) {
         setRecaptchaToken(token)
-        submitLoginForm();
+        console.log(token)
+        await submitLoginForm();
       }
     }
   };
