@@ -68,10 +68,12 @@ function Signup()
       formData.append('userId', id);
       formData.append('password',password);
       formData.append('userNick', userName);
-      formData.append('recaptchaToken', recaptchaToken);
       if(imgUrl){
+        //console.log(imgUrl)
         formData.append('profileImage', imgUrl);
       }
+      formData.append('recaptchaToken', recaptchaToken);
+
       
 
       
@@ -81,11 +83,11 @@ function Signup()
           'Content-Type': 'multipart/form-data', // FormData 전송을 위한 헤더 설정
         },
       });
-      console.log(response.data)
+      //console.log(response.data)
       return response.data;
     },
     onSuccess: (data) => {
-      if(data==='true')
+      if(data.message==="Success")
       {
         navigate('/login'); 
       }
@@ -102,12 +104,12 @@ function Signup()
   //id중복 검사
   const idcheck = useMutation({
     mutationFn: async () => {
-      //const response: boolean = (await axios.get(`/user/idJungbok?id=${id}`)).data;
-      const response = await postData(`/user/idJungbok`, { id: id,});
+      const response: boolean = (await axios.get(`/user/idJungbok?id=${id}`)).data;
+
       return response;
     },
     onSuccess: (data) => {
-      console.log(data)
+      //console.log(data)
       if(data==true)
       {
         setIdCheckStatus(true)
