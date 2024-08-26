@@ -4,7 +4,7 @@ import { Chat, ChatGroup } from '../api/models/chatModel';
 import { useEffect, useRef, useState } from 'react';
 import MessageGroup from '../components/messageGroup';
 import { MessageGroupType } from '../components/messageBubbleType';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import MessageField from '../components/MessageField';
 import AppBar from '../components/AppBar';
 import UserWithImg from '../components/UserWithImg';
@@ -101,7 +101,7 @@ function ChatPage() {
       addChat(chat);
     }
 
-    function onUserList(room: string, userList: string[]) {
+    function onUserList(userList: string[]) {
       console.log(userList);
     }
 

@@ -2,8 +2,6 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
 } from "axios";
-import { useAtomValue } from 'jotai';
-import { userTokenAtom } from '../atom/userAtom';
 
 interface APIResponse<T> {
   message: string;
@@ -28,7 +26,7 @@ const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Prom
     console.log("handleAxiosError");
     const response : APIResponse<T> = await callback();
     console.log("dsf",response.message);
-    return response;
+    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
