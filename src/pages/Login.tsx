@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAtom } from 'jotai';
 import { userTokenAtom } from '../atom/userAtom';
-
+import devkorImage from '/src/assets/images/devkor_logo.svg';
 function Login() 
 {
     const [id, setId] = useState<string>('');
@@ -72,7 +72,7 @@ const LoginSubmit = useMutation({
       <div  className="h-screen">
         <section className=" flex flex-col items-center p-[10%]">
         <div className='flex devkor_logo pb-[60px] pt-[50%]'>
-          <img className="w-51px h-51px flex-shrink-0" src='/src/assets/images/devkor_logo.svg' alt="DEVKOR Logo" />
+          <img className="w-51px h-51px flex-shrink-0" src={devkorImage} alt="DEVKOR Logo" />
           <span className="text-center font-montserrat text-[39px] font-bold leading-normal text-[#505156]">DEVKOR</span>
         </div>
         <p className='text-left mr-auto font-pre text-label-300 text-[18px] font-semibold pb-[5%]'>로그인</p>

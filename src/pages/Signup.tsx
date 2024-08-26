@@ -4,6 +4,7 @@ import { useMutation  } from '@tanstack/react-query';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import devkorImage from '/src/assets/images/devkor_logo.svg';
 
 function Signup() 
 {
@@ -132,7 +133,7 @@ function Signup()
         <div className="h-screen">
         <section className=" flex flex-col items-center p-[10%]">
         <div className='flex devkor_logo pb-[60px] pt-[50%]'>
-          <img className="w-51px h-51px flex-shrink-0" src='/src/assets/images/devkor_logo.svg' alt="DEVKOR Logo" />
+          <img className="w-51px h-51px flex-shrink-0" src={devkorImage} alt="DEVKOR Logo" />
           <span className="text-center font-montserrat text-[39px] font-bold leading-normal text-[#505156]">DEVKOR</span>
         </div>
 
