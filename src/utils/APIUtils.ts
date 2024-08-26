@@ -1,19 +1,14 @@
 import axios, {
   AxiosInstance,
-  AxiosRequestConfig
+  AxiosRequestConfig,
 } from "axios";
+import { useAtomValue } from 'jotai';
+import { userTokenAtom } from '../atom/userAtom';
 
 interface APIResponse<T> {
   message: string;
   data: T;
 }
-
-const client: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL as string,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 /**
  * Returns the data from the APIResponse if the request is successful and when an error occurs, it logs the error
@@ -30,8 +25,9 @@ const client: AxiosInstance = axios.create({
  */
 const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Promise<T> => {
   try {
+    console.log("handleAxiosError");
     const response : APIResponse<T> = await callback();
-    console.log(response);
+    console.log("dsf",response.message);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -49,6 +45,7 @@ const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Prom
       }
       console.error(error.config);
     }
+    console.error("error",error);
     throw error;
   }
 }
@@ -62,15 +59,16 @@ const handleAxiosError = async <T>(callback: () => Promise<APIResponse<T>>):Prom
  */
 export const getData = async <T>(
   url: string,
-  config?: AxiosRequestConfig
+  client: AxiosInstance,
+  config?: AxiosRequestConfig,
 ): Promise<T> => {
+  console.log("getData from", url);
   return await handleAxiosError<T>(async ()=>{
     const response = await client.get<APIResponse<T>>(url, config);
+    console.log(response.data);
     return response.data;
   });
 };
-
-
 
 /**
  * Makes a POST request to the specified URL and returns the data field inside the APIResponse
@@ -82,6 +80,7 @@ export const getData = async <T>(
  */
 export const postData = async <T, U>(
   url: string,
+  client: AxiosInstance,
   data?: U,
   config?: AxiosRequestConfig
 ): Promise<T> => {
@@ -102,6 +101,7 @@ export const postData = async <T, U>(
  */
 export const putData = async <T, U>(
   url: string,
+  client: AxiosInstance,
   data?: U,
   config?: AxiosRequestConfig
 ): Promise<T> => {
@@ -120,6 +120,7 @@ export const putData = async <T, U>(
  */
 export const deleteData = async <T>(
   url: string,
+  client: AxiosInstance,
   config?: AxiosRequestConfig
 ): Promise<T> => {
   return await handleAxiosError<T>(async ()=>{

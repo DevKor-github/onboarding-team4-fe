@@ -72,7 +72,7 @@ const LoginSubmit = useMutation({
         navigate('/signup'); // '/signup' 경로로 네비게이션
       };
     return (
-      <div >
+      <div  className="h-screen">
         <section className=" flex flex-col items-center p-[10%]">
         <div className='flex devkor_logo pb-[60px] pt-[50%]'>
           <img className="w-51px h-51px flex-shrink-0" src='/src/assets/images/devkor_logo.svg' alt="DEVKOR Logo" />

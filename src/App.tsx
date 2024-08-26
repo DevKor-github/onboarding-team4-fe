@@ -1,19 +1,26 @@
 import './index.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/Hompage.tsx';
-import Login from './pages/Login.tsx';
-import Signup from './pages/Signup.tsx';
+import ChatPage from './pages/ChatPage';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import ChatRoomListPage from './pages/ChatRoomListPage';
+import Layout from './pages/Layout';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
-const App: React.FC = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
+function App() {
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path='/' element={<Layout />}>
+        <Route index element={<ChatRoomListPage />} />
+        <Route path='chat/:chatRoomId' element={<ChatPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </Router>
-  );
-};
+      </Route>
+    )
+  )
 
-export default App;
+  return <RouterProvider router={router} />
+}
+
+
+export default App
