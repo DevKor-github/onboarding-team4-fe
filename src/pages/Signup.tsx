@@ -1,9 +1,8 @@
 
-import { useState,FormEvent,ChangeEvent,useRef } from 'react'
+import { useState,ChangeEvent,useRef } from 'react'
 import { useMutation  } from '@tanstack/react-query';
-import { getData,postData} from '../utils/APIUtils.ts'; 
 import ReCAPTCHA from 'react-google-recaptcha';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Signup() 

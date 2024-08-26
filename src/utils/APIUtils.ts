@@ -2,8 +2,6 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
 } from "axios";
-import { useAtomValue } from 'jotai';
-import { userTokenAtom } from '../atom/userAtom';
 
 interface APIResponse<T> {
   message: string;

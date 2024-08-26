@@ -16,14 +16,6 @@ function Login()
     const recaptchaPublicKey:string ='6LftPikqAAAAAG092WYrnBruUZ61lCnmQJM4AnYc'
     const recaptchaRef = useRef<ReCAPTCHA | null>(null);
     const [, setUserToken] = useAtom(userTokenAtom);
-    interface LoginRequest {
-      userId: string;
-      password: string;
-      recaptchaToken:string;
-    }
-    interface LoginResponse {
-      res: string;  // 서버에서 반환하는 응답 타입
-    }
 
     const postData = async <T, U>(url: string, data: U): Promise<T> => {
       const response: AxiosResponse<T> = await axios.post(url, data);
